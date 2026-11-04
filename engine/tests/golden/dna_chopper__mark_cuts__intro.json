@@ -1,0 +1,78 @@
+{
+  "bridge": {
+    "code": "# Biopython 1.85\nfrom Bio.Seq import Seq\nfrom Bio.Restriction import RestrictionBatch\n\nseq = Seq(\"CACCTAAGCTTTTCGGTTTCGCGCATTCGGATTCGAAAGCTTGCACCGG\")\nenzymes = RestrictionBatch([\"HindIII\"])\n\n# 1-based position of the first base after each top-strand cut\nsites = enzymes.search(seq, linear=True)\nprint(sites)\n\ncuts = sorted({pos for hits in sites.values() for pos in hits})\nbounds = [1] + cuts + [len(seq) + 1]\nsizes = [b - a for a, b in zip(bounds, bounds[1:])]\nprint(sorted(sizes, reverse=True))\n",
+    "doc_url": "https://biopython.org/docs/latest/api/Bio.Restriction.html",
+    "language": "python",
+    "tool_versions": [
+      {
+        "tool": "Biopython",
+        "version": "1.85"
+      }
+    ]
+  },
+  "evaluation": {
+    "concepts": [
+      {
+        "concept": "restriction_site",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "palindromic_site",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "cut_position",
+        "credit_permille": 1000
+      }
+    ],
+    "hints_used": 0,
+    "max_score": 100,
+    "misconceptions": [],
+    "score": 100,
+    "solved": true
+  },
+  "scenario": {
+    "body": {
+      "sequence": "CACCTAAGCTTTTCGGTTTCGCGCATTCGGATTCGAAAGCTTGCACCGG",
+      "task": {
+        "enzymes": [
+          "HindIII"
+        ],
+        "round": "mark_cuts"
+      },
+      "topology": "linear"
+    },
+    "concepts": [
+      "restriction_site",
+      "palindromic_site",
+      "cut_position"
+    ],
+    "engine_version": "0.1.0",
+    "game": "dna_chopper",
+    "params": {
+      "difficulty": "intro",
+      "round": "mark_cuts",
+      "seed": 7,
+      "support": "independent"
+    }
+  },
+  "solution": [
+    {
+      "action": {
+        "position": 6,
+        "type": "toggle_cut"
+      }
+    },
+    {
+      "action": {
+        "position": 37,
+        "type": "toggle_cut"
+      }
+    },
+    {
+      "action": {
+        "type": "submit_cuts"
+      }
+    }
+  ]
+}

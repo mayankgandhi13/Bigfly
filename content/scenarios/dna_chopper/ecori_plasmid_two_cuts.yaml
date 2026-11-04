@@ -1,0 +1,17 @@
+# Edge case: two EcoRI cuts in a circular plasmid give two fragments, not three.
+# Sites start at 3 and 24 → top-strand cuts at 4 and 25 in a 40 bp circle → 21 + 19.
+id: dna_chopper.ecori_plasmid_two_cuts
+game: dna_chopper
+difficulty: standard
+targets_misconception: M-011
+body:
+  sequence: AAAGAATTCAAAAAAAAAAAAAAAGAATTCAAAAAAAAAA
+  topology: circular
+  task: { round: predict_fragments, enzymes: [EcoRI] }
+expect:
+  solution:
+    - { type: submit_fragments, sizes: [21, 19] }
+  wrong_answers:
+    # Treated as linear: 4 + 21 + 15.
+    - actions: [{ type: submit_fragments, sizes: [21, 15, 4] }]
+      misconceptions: [M-011]

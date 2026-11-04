@@ -5,8 +5,16 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
+env:
+  RUST_TOOLCHAIN: "1.95.0"
+  CARGO_TERM_COLOR: always
+
 jobs:
   engine:
+    name: Engine (tests, lint, WASM)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -15,17 +23,65 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: "1.95.0"
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
           components: rustfmt, clippy
-          targets: wasm32-unknown-unknown
+          targets: wasm32-unknown-unknown, wasm32-wasip1
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: engine
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - run: cargo fmt --check
-      - run: cargo clippy --all-targets -- -D warnings
-      - run: cargo test
-      - run: cargo build --release --target wasm32-unknown-unknown
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: cargo test --all-features
+      - name: Browser WASM build
+        run: cargo build --release --target wasm32-unknown-unknown --features wasm
+      - name: Determinism - golden + property tests compiled to WASM (Node WASI)
+        env:
+          CARGO_TARGET_WASM32_WASIP1_RUNNER: node ${{ github.workspace }}/engine/scripts/wasi-runner.mjs
+        run: cargo test --target wasm32-wasip1 --test determinism --test properties
 
-  # Phase 0 TODO: content job. Run `cargo run --bin content-check -- ../content`
-  # (schema + science checks), plus a negative test that must fail on content/tests/broken/.
-  # Phase 1 TODO: web job (pnpm build of apps/web).
+  content:
+    name: Content (schema + science checks)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: engine
+      - run: cargo build --release --features content --bin content-check
+      - name: Real content passes
+        run: ./target/release/content-check ../content
+      - name: Each deliberately broken scenario fails
+        run: |
+          status=0
+          for f in ../content/tests/broken/*.yaml; do
+            if ./target/release/content-check ../content --scenarios "$f" > /dev/null 2>&1; then
+              echo "::error file=content/tests/broken/$(basename "$f")::checker accepted a broken scenario"
+              status=1
+            else
+              echo "ok (rejected): $f"
+            fi
+          done
+          exit $status
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+      - run: cargo install cargo-audit --locked
+      - run: cargo audit
+        working-directory: engine
+
+  # Phase 1 TODO: web job (pnpm build of apps/web + pnpm audit).

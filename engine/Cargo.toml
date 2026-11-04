@@ -1,6 +1,6 @@
 [package]
 name = "seqly-engine"
-version = "0.0.0"
+version = "0.1.0"
 edition = "2024"
 rust-version = "1.95"
 description = "Deterministic bioinformatics simulation engines for Seqly.bio"
@@ -9,3 +9,27 @@ publish = false
 [lib]
 crate-type = ["cdylib", "rlib"]
 
+[features]
+default = []
+# wasm-bindgen exports for the browser / server replay.
+wasm = ["dep:wasm-bindgen"]
+# YAML content loading + the content-check binary (CI only; not in the WASM build).
+content = ["dep:serde_yaml_ng"]
+
+[dependencies]
+libm = "0.2.16"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+serde_yaml_ng = { version = "0.10.0", optional = true }
+wasm-bindgen = { version = "0.2.130", optional = true }
+
+[[bin]]
+name = "content-check"
+path = "src/bin/content_check.rs"
+required-features = ["content"]
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true

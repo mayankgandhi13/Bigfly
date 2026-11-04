@@ -1,0 +1,15 @@
+# Edge case: different enzymes with the same overhang (GATC) can be ligated.
+id: dna_chopper.bamhi_bglii_compatible
+game: dna_chopper
+difficulty: standard
+targets_misconception: M-017
+body:
+  sequence: AAGGATCCAAAAAGATCTAA
+  topology: linear
+  task: { round: ligation, end_a: BamHI, end_b: BglII }
+expect:
+  solution:
+    - { type: choose_ligation, ligates: true }
+  wrong_answers:
+    - actions: [{ type: choose_ligation, ligates: false }]
+      misconceptions: [M-017]

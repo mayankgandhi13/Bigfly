@@ -1,0 +1,12 @@
+# BROKEN ON PURPOSE: M-999 doesn't exist in the misconception library.
+id: broken.unknown_misconception
+game: dna_chopper
+difficulty: standard
+body:
+  sequence: AAGGATCCAAAAAGATCTAA
+  topology: linear
+  task: { round: ligation, end_a: BamHI, end_b: BglII }
+expect:
+  wrong_answers:
+    - actions: [{ type: choose_ligation, ligates: false }]
+      misconceptions: [M-999]

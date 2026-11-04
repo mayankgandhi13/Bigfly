@@ -1,4 +1,22 @@
-# Phase 0 plan: engine core (PROPOSAL, awaiting confirmation)
+# Phase 0 plan: engine core
+
+## Status (2026-11-03)
+**Engine core done. Exit criteria met.** The minimal web shell (§10) is still open.
+
+- Both games are deterministic: golden files are identical natively and as WebAssembly (CI runs them under Node WASI). Property tests cover 150 seeds × every round × every difficulty.
+- CI rejects each file in `content/tests/broken/` (4 deliberate authoring mistakes).
+- Content v0: 49 concepts, 24 misconceptions (all awaiting expert review), 12 glossary terms, 4 hand-written edge-case scenarios.
+
+Decisions taken: `serde_yaml_ng`. Two axes, Difficulty × Support. XhoI and BglII added to the panel. TS type generation (`ts-rs`) is deferred to the web shell. Licences not yet chosen.
+
+Where the code differs from the proposal below:
+- Each game is one file (`games/<game>.rs`) rather than five. Split them when a game grows.
+- The scenario envelope holds `engine_version` but not `content_version`. The web app stamps `content_version` on the attempt, since generated scenarios don't depend on content.
+- `GenParams` gained an optional `round` (to pin a round type), and seeds are capped at 2^53−1 so they survive JSON in the browser.
+- The checker is the `content-check` binary (feature `content`). Hand-written scenarios use `expect.solution` and `expect.wrong_answers` (see `content/scenarios/`).
+
+---
+
 
 **Goal:** the engine runs DNA Chopper and Sequence Scramble deterministically, and CI catches a deliberately broken scenario. There is a static site and no DB.
 
@@ -229,7 +247,7 @@ A bare Next.js static export page that loads the WASM, generates a scenario from
 
 ---
 
-## Open decisions
+## Open decisions (original list; see Status above for what's resolved)
 1. **YAML parser:** `serde_yaml` is archived/unmaintained. The options are `serde_yaml_ng` (a maintained fork, drop-in) or authoring content in YAML but validating via JSON Schema in a small script. Recommendation: `serde_yaml_ng`.
 2. **TS type generation:** `ts-rs` vs `tsify` vs hand-written types. Recommendation: `ts-rs`.
 3. **Web shell in Phase 0:** yes or no (§10).

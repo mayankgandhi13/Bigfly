@@ -1,0 +1,16 @@
+# Edge case: a 3 bp deletion removes one codon (AAA, Lys) and keeps the frame.
+id: sequence_scramble.in_frame_deletion
+game: sequence_scramble
+difficulty: intro
+targets_misconception: M-008
+body:
+  task:
+    round: frameshift
+    coding: ATGGCCAAATTTGGGTAA
+    mutation: { position: 6, change: { kind: deletion, length: 3 } }
+expect:
+  solution:
+    - { type: choose_effect, effect: in_frame }
+  wrong_answers:
+    - actions: [{ type: choose_effect, effect: frameshift }]
+      misconceptions: [M-008]

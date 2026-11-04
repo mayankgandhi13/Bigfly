@@ -84,10 +84,19 @@ When unsure about a scientific claim, **say so and ask** rather than inventing. 
 - `docs/`: architecture and design docs
 - `.github/workflows/`: CI
 
-## Common commands
-- Engine tests: `cd engine && cargo test`
-- Lint: `cd engine && cargo fmt --check && cargo clippy --all-targets -- -D warnings`
-- WASM build check: `cd engine && cargo build --target wasm32-unknown-unknown`
+## Common commands (run from `engine/`)
+- All tests: `cargo test --all-features`
+- Lint: `cargo fmt --check && cargo clippy --all-targets --all-features -- -D warnings`
+- Content checks: `cargo run --features content --bin content-check -- ../content`
+- Browser WASM build: `cargo build --release --target wasm32-unknown-unknown --features wasm`
+- Same tests as WASM: `CARGO_TARGET_WASM32_WASIP1_RUNNER="node $PWD/scripts/wasi-runner.mjs" cargo test --target wasm32-wasip1 --test determinism --test properties`
+- Regenerate golden files (**only for intended behaviour changes, and bump the version in `Cargo.toml`**): `UPDATE_GOLDEN=1 cargo test --test determinism`
+
+## Adding a game
+1. Create `engine/src/games/<id>.rs` implementing `Game` (copy the shape of `dna_chopper.rs`), and register it in `core/registry.rs::games()`.
+2. Declare every concept and misconception it can emit in `manifest()`, and add any missing ones to `content/`.
+3. Each multiple-choice option must map to a misconception (the property tests enforce this).
+4. Add hand-written edge cases under `content/scenarios/<id>/`, and generate golden files.
 
 ## Current phase
 **Phase 0 (Engine).** Engine core, the Game trait, concept graph v0 (~40 concepts), misconception library v0 and CI science checks. A static site with no DB.

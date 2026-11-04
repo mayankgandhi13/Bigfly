@@ -1,0 +1,252 @@
+# Concept graph v0: molecular biology foundations (Level 1).
+# `requires` lists prerequisites; the graph must stay acyclic (checked in CI).
+
+- id: nucleotide_bases
+  name: Nucleotide bases
+  area: molecular_biology
+  level: 1
+  summary: DNA is built from A, C, G and T; RNA uses U instead of T.
+
+- id: dna_structure
+  name: Double-stranded DNA
+  area: molecular_biology
+  level: 1
+  requires: [nucleotide_bases]
+  summary: DNA is two strands wound into a double helix, held together by base pairs.
+
+- id: base_pairing
+  name: Base pairing
+  area: molecular_biology
+  level: 1
+  requires: [nucleotide_bases]
+  summary: A pairs with T (or U in RNA), and G pairs with C.
+
+- id: antiparallel_strands
+  name: Antiparallel strands
+  area: molecular_biology
+  level: 1
+  requires: [dna_structure]
+  summary: The two strands run in opposite directions (5'→3' and 3'→5'). By convention, sequences are written 5'→3'.
+
+- id: reverse_complement
+  name: Reverse complement
+  area: molecular_biology
+  level: 1
+  requires: [base_pairing, antiparallel_strands]
+  summary: The sequence of the opposite strand written 5'→3', found by complementing each base and reversing the order.
+  misconceptions: [M-001, M-002]
+
+- id: dna_topology
+  name: Linear vs circular DNA
+  area: molecular_biology
+  level: 1
+  requires: [dna_structure]
+  summary: Plasmids and many bacterial chromosomes are circular, with no free ends. Linear molecules have two ends.
+  misconceptions: [M-011]
+  glossary: [plasmid]
+
+- id: rna_vs_dna
+  name: RNA vs DNA
+  area: molecular_biology
+  level: 1
+  requires: [nucleotide_bases]
+  summary: RNA is usually single-stranded, uses ribose, and contains uracil (U) where DNA has thymine (T).
+  misconceptions: [M-005]
+
+- id: transcription
+  name: Transcription
+  area: molecular_biology
+  level: 1
+  requires: [base_pairing, antiparallel_strands, rna_vs_dna]
+  summary: RNA polymerase reads the template strand 3'→5' and builds a complementary RNA 5'→3'.
+
+- id: template_vs_coding_strand
+  name: Template vs coding strand
+  area: molecular_biology
+  level: 1
+  requires: [transcription]
+  summary: The mRNA is complementary to the template strand, so it matches the coding strand (with U for T).
+  misconceptions: [M-003, M-004]
+
+- id: codon
+  name: Codon
+  area: molecular_biology
+  level: 1
+  requires: [nucleotide_bases]
+  summary: Three consecutive nucleotides of mRNA that specify one amino acid or a stop signal.
+  glossary: [codon]
+
+- id: genetic_code
+  name: The genetic code
+  area: molecular_biology
+  level: 1
+  requires: [codon]
+  summary: The mapping from 64 codons to 20 amino acids plus stop. It is degenerate (most amino acids have several codons) and nearly universal.
+
+- id: start_codon
+  name: Start codon
+  area: molecular_biology
+  level: 1
+  requires: [genetic_code]
+  summary: Translation usually begins at an AUG (methionine), which sets the reading frame. The region before it is the 5' UTR.
+  misconceptions: [M-006]
+  glossary: [utr]
+
+- id: stop_codon
+  name: Stop codons
+  area: molecular_biology
+  level: 1
+  requires: [genetic_code]
+  summary: UAA, UAG and UGA end translation. They add no amino acid.
+  misconceptions: [M-007]
+
+- id: reading_frame
+  name: Reading frame
+  area: molecular_biology
+  level: 1
+  requires: [codon]
+  summary: How a sequence is split into codons. Each strand has three possible frames.
+
+- id: translation
+  name: Translation
+  area: molecular_biology
+  level: 1
+  requires: [transcription, start_codon, stop_codon, reading_frame]
+  summary: Ribosomes read mRNA codon by codon from the start codon to a stop codon, building a protein.
+  misconceptions: [M-006, M-007]
+
+- id: open_reading_frame
+  name: Open reading frame (ORF)
+  area: molecular_biology
+  level: 1
+  requires: [reading_frame, start_codon, stop_codon]
+  summary: A stretch from a start codon to an in-frame stop codon with no stop in between.
+  glossary: [open_reading_frame]
+
+- id: point_mutation
+  name: Point mutation
+  area: molecular_biology
+  level: 1
+  requires: [genetic_code]
+  summary: A single-base substitution. It can be silent, missense or nonsense, depending on the codon change.
+
+- id: indel
+  name: Insertion / deletion (indel)
+  area: molecular_biology
+  level: 1
+  requires: [dna_structure]
+  summary: Bases inserted into or deleted from a sequence.
+  misconceptions: [M-008]
+
+- id: frameshift_mutation
+  name: Frameshift mutation
+  area: molecular_biology
+  level: 1
+  requires: [indel, reading_frame]
+  summary: An indel whose length isn't a multiple of 3 shifts the reading frame for every downstream codon.
+  misconceptions: [M-008, M-009]
+
+- id: restriction_enzyme
+  name: Restriction enzyme
+  area: molecular_biology
+  level: 1
+  requires: [dna_structure]
+  summary: An endonuclease that recognises a specific short sequence and cuts both strands at a defined position.
+  glossary: [restriction_enzyme]
+
+- id: restriction_site
+  name: Recognition site
+  area: molecular_biology
+  level: 1
+  requires: [restriction_enzyme]
+  summary: The specific sequence an enzyme binds, e.g. GAATTC for EcoRI.
+  glossary: [restriction_enzyme, palindrome]
+
+- id: palindromic_site
+  name: Palindromic sites
+  area: molecular_biology
+  level: 1
+  requires: [restriction_site, reverse_complement]
+  summary: Many recognition sites equal their own reverse complement, so they read the same on both strands.
+  glossary: [palindrome]
+
+- id: cut_position
+  name: Cut position
+  area: molecular_biology
+  level: 1
+  requires: [restriction_site]
+  summary: Where within (or near) the site each strand is cut, e.g. EcoRI cuts G^AATTC.
+  misconceptions: [M-010, M-014]
+
+- id: sticky_end
+  name: Sticky ends
+  area: molecular_biology
+  level: 1
+  requires: [cut_position]
+  summary: Staggered cuts leave single-stranded overhangs that can base-pair with complementary overhangs.
+  misconceptions: [M-013, M-014]
+  glossary: [overhang]
+
+- id: blunt_end
+  name: Blunt ends
+  area: molecular_biology
+  level: 1
+  requires: [cut_position]
+  summary: Cutting both strands at the same position leaves no overhang, e.g. HaeIII GG^CC.
+  misconceptions: [M-013, M-018]
+
+- id: overhang_polarity
+  name: 5' vs 3' overhangs
+  area: molecular_biology
+  level: 1
+  requires: [sticky_end, antiparallel_strands]
+  summary: Depending on the cut positions, the protruding single strand carries a 5' end (EcoRI) or a 3' end (PstI).
+  misconceptions: [M-015, M-016]
+  glossary: [overhang]
+
+- id: restriction_digest
+  name: Restriction digest
+  area: molecular_biology
+  level: 1
+  requires: [cut_position, dna_topology]
+  summary: Cutting DNA with one or more enzymes to produce fragments of predictable sizes.
+
+- id: fragment_size
+  name: Fragment sizes
+  area: molecular_biology
+  level: 1
+  requires: [restriction_digest]
+  summary: Fragment lengths follow from the cut positions. n cuts give n+1 fragments if the molecule is linear, n if circular.
+  misconceptions: [M-011]
+
+- id: gel_electrophoresis
+  name: Gel electrophoresis
+  area: molecular_biology
+  level: 1
+  requires: [fragment_size]
+  summary: DNA fragments migrate through agarose by size. Smaller fragments run further, roughly linearly in log(size).
+  glossary: [agarose_gel]
+
+- id: restriction_mapping
+  name: Restriction mapping
+  area: molecular_biology
+  level: 1
+  requires: [gel_electrophoresis, restriction_digest]
+  summary: Inferring where enzymes cut from the fragment sizes on a gel. Several enzyme sets can produce the same pattern.
+
+- id: ligation
+  name: Ligation
+  area: molecular_biology
+  level: 1
+  requires: [sticky_end, blunt_end]
+  summary: DNA ligase joins DNA ends. Compatible sticky ends anneal first, and blunt ends can also be joined, less efficiently.
+  misconceptions: [M-018, M-021]
+  glossary: [dna_ligase]
+
+- id: compatible_ends
+  name: Compatible ends
+  area: molecular_biology
+  level: 1
+  requires: [ligation, overhang_polarity]
+  summary: Ends ligate directly if their overhangs are complementary with the same polarity, even when made by different enzymes.
+  misconceptions: [M-017, M-020, M-021]

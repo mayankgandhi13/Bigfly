@@ -1,0 +1,13 @@
+# BROKEN ON PURPOSE: a 3 bp deletion is in-frame, so "frameshift" is M-008, not M-009.
+id: broken.wrong_misconception_claim
+game: sequence_scramble
+difficulty: intro
+body:
+  task:
+    round: frameshift
+    coding: ATGGCCAAATTTGGGTAA
+    mutation: { position: 6, change: { kind: deletion, length: 3 } }
+expect:
+  wrong_answers:
+    - actions: [{ type: choose_effect, effect: frameshift }]
+      misconceptions: [M-009]

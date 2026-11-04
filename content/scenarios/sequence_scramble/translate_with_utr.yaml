@@ -1,0 +1,18 @@
+# Edge case: a 5' UTR before the AUG and codons after the stop.
+# GC | AUG GCC AAA | UAA | GGG  →  MAK
+id: sequence_scramble.translate_with_utr
+game: sequence_scramble
+difficulty: intro
+targets_misconception: M-006
+body:
+  task: { round: translate, mrna: GCAUGGCCAAAUAAGGG }
+expect:
+  solution:
+    - { type: submit_sequence, sequence: MAK }
+  wrong_answers:
+    # Started at base 1: GCA UGG CCA AAU AAG → A W P N K
+    - actions: [{ type: submit_sequence, sequence: AWPNK }]
+      misconceptions: [M-006]
+    # Read through the stop codon.
+    - actions: [{ type: submit_sequence, sequence: MAKG }]
+      misconceptions: [M-007]

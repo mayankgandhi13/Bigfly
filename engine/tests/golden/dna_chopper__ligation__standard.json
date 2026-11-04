@@ -1,0 +1,61 @@
+{
+  "bridge": {
+    "code": "# Biopython 1.85\nfrom Bio.Restriction import HaeIII\n\nprint(HaeIII.elucidate(), HaeIII.elucidate())\n# Enzymes whose ends can be ligated directly to HaeIII ends:\nprint(HaeIII in HaeIII.compatible_end())\n",
+    "doc_url": "https://biopython.org/docs/latest/api/Bio.Restriction.html",
+    "language": "python",
+    "tool_versions": [
+      {
+        "tool": "Biopython",
+        "version": "1.85"
+      }
+    ]
+  },
+  "evaluation": {
+    "concepts": [
+      {
+        "concept": "ligation",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "compatible_ends",
+        "credit_permille": 1000
+      }
+    ],
+    "hints_used": 0,
+    "max_score": 100,
+    "misconceptions": [],
+    "score": 100,
+    "solved": true
+  },
+  "scenario": {
+    "body": {
+      "sequence": "TGGTGACACCTTAAAACTTCGGGGCCGCGCATTCGGCCTCGAGTTAACGCACCGGTGGAT",
+      "task": {
+        "end_a": "HaeIII",
+        "end_b": "HaeIII",
+        "round": "ligation"
+      },
+      "topology": "linear"
+    },
+    "concepts": [
+      "ligation",
+      "compatible_ends"
+    ],
+    "engine_version": "0.1.0",
+    "game": "dna_chopper",
+    "params": {
+      "difficulty": "standard",
+      "round": "ligation",
+      "seed": 7,
+      "support": "independent"
+    }
+  },
+  "solution": [
+    {
+      "action": {
+        "ligates": true,
+        "type": "choose_ligation"
+      }
+    }
+  ]
+}

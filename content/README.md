@@ -11,4 +11,12 @@ Learning content as code. CI validates everything here with schema checks and sc
 | `case-files/` | Case File manifests |
 
 `VERSION` holds the content release version. Every attempt records it.
-Schemas: see `docs/PHASE0_PLAN.md` §6.
+Schemas: Rust structs in `engine/src/content.rs` (unknown fields are rejected). Check locally:
+
+```sh
+cd engine && cargo run --features content --bin content-check -- ../content
+```
+
+`tests/broken/` holds scenarios that are **meant** to fail. CI checks that each one is rejected.
+
+Misconception text needs expert review before release. Set `reviewed_by` once it's been reviewed.

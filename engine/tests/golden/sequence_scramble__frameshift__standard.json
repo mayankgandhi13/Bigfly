@@ -1,0 +1,70 @@
+{
+  "bridge": {
+    "code": "# Biopython 1.85\nfrom Bio.Seq import Seq\n\nwild_type = Seq(\"ATGATGCCGAGCCCCTATACTCCGATGCCCATACATTTCTGA\")\nmutant    = Seq(\"ATGATGCCGAGCCCCTATACTCCGATGCCCATACATTCTCTGA\")\n\ndef protein(s):\n    return s[: len(s) - len(s) % 3].translate(to_stop=True)\n\nprint(protein(wild_type))\nprint(protein(mutant))   # compare the residues after position 37\n",
+    "doc_url": "https://biopython.org/docs/latest/api/Bio.Seq.html",
+    "language": "python",
+    "tool_versions": [
+      {
+        "tool": "Biopython",
+        "version": "1.85"
+      }
+    ]
+  },
+  "evaluation": {
+    "concepts": [
+      {
+        "concept": "reading_frame",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "indel",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "frameshift_mutation",
+        "credit_permille": 1000
+      }
+    ],
+    "hints_used": 0,
+    "max_score": 100,
+    "misconceptions": [],
+    "score": 100,
+    "solved": true
+  },
+  "scenario": {
+    "body": {
+      "task": {
+        "coding": "ATGATGCCGAGCCCCTATACTCCGATGCCCATACATTTCTGA",
+        "mutation": {
+          "change": {
+            "bases": "C",
+            "kind": "insertion"
+          },
+          "position": 37
+        },
+        "round": "frameshift"
+      }
+    },
+    "concepts": [
+      "reading_frame",
+      "indel",
+      "frameshift_mutation"
+    ],
+    "engine_version": "0.1.0",
+    "game": "sequence_scramble",
+    "params": {
+      "difficulty": "standard",
+      "round": "frameshift",
+      "seed": 7,
+      "support": "independent"
+    }
+  },
+  "solution": [
+    {
+      "action": {
+        "effect": "frameshift",
+        "type": "choose_effect"
+      }
+    }
+  ]
+}

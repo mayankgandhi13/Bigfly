@@ -1,0 +1,193 @@
+# Misconception library v0: molecular biology (DNA Chopper, Sequence Scramble).
+# Every entry needs expert review before release: set `reviewed_by` when done.
+
+- id: M-001
+  statement: The reverse complement is just the complement.
+  concepts: [reverse_complement, antiparallel_strands]
+  feedback:
+    short: Complement each base, then reverse the order.
+    explain: |
+      Complementing each base gives the partner strand, but read 3'→5'. Sequences
+      are written 5'→3', so you also need to reverse it. 5'-AACG-3' pairs with
+      3'-TTGC-5', which is written 5'-CGTT-3'.
+
+- id: M-002
+  statement: The reverse complement is just the sequence written backwards.
+  concepts: [reverse_complement, base_pairing]
+  feedback:
+    short: Reversing changes the direction, but you also need the partner bases.
+    explain: |
+      The other strand pairs A with T and G with C, so each base must also be
+      complemented. Reversing alone gives a sequence that isn't on either strand.
+
+- id: M-003
+  statement: mRNA has the same sequence as the template strand.
+  concepts: [template_vs_coding_strand, transcription]
+  feedback:
+    short: mRNA is complementary to the template strand.
+    explain: |
+      RNA polymerase reads the template strand and builds RNA complementary to it.
+      The mRNA therefore matches the coding (sense) strand, with U in place of T.
+
+- id: M-004
+  statement: mRNA is complementary to the coding strand.
+  concepts: [template_vs_coding_strand, transcription]
+  feedback:
+    short: mRNA matches the coding strand (with U for T).
+    explain: |
+      The mRNA is complementary to the template strand, which makes it identical in
+      sequence to the coding strand, apart from U for T. That's why it's called the
+      "coding" strand: you can read the protein straight from it.
+
+- id: M-005
+  statement: RNA contains thymine (T).
+  concepts: [rna_vs_dna]
+  feedback:
+    short: RNA uses uracil (U) where DNA uses thymine (T).
+    explain: |
+      In RNA, uracil (U) takes the place of thymine and pairs with A. Write mRNA
+      with U, not T.
+
+- id: M-006
+  statement: Translation starts at the first nucleotide of the mRNA.
+  concepts: [start_codon, translation, reading_frame]
+  feedback:
+    short: Translation starts at a start codon, not at the first base.
+    explain: |
+      mRNAs have a 5' untranslated region (5' UTR) before the coding sequence.
+      Translation starts at a start codon (usually AUG), which also sets the
+      reading frame. In eukaryotes the ribosome typically scans from the 5' cap and
+      starts at the first AUG in a good context. In this game, use the first AUG.
+  references: ["https://www.ncbi.nlm.nih.gov/books/NBK26829/"]
+
+- id: M-007
+  statement: Translation continues past a stop codon.
+  concepts: [stop_codon, translation]
+  feedback:
+    short: Translation ends at the first in-frame stop codon.
+    explain: |
+      UAA, UAG and UGA are stop codons. Release factors end translation there, and
+      the stop codon adds no amino acid. The sequence after it (the 3' UTR) isn't
+      translated. Rare exceptions, such as selenocysteine recoding of UGA, exist but
+      aren't the default.
+
+- id: M-008
+  statement: Any insertion or deletion shifts the reading frame.
+  concepts: [indel, frameshift_mutation, reading_frame]
+  feedback:
+    short: Only indels whose length isn't a multiple of 3 shift the frame.
+    explain: |
+      An in-frame indel of 3, 6, … bases adds or removes whole codons, and the
+      downstream codons are read normally. The codon at the junction can still
+      change, and an in-frame indel can still be harmful, but the frame is kept.
+
+- id: M-009
+  statement: An insertion or deletion only changes the codon where it occurs.
+  concepts: [frameshift_mutation, reading_frame]
+  feedback:
+    short: A frameshift changes every codon downstream.
+    explain: |
+      If the indel length isn't a multiple of 3, every codon after it is read in a
+      new frame. That usually changes many amino acids and often hits a premature
+      stop codon.
+
+- id: M-010
+  statement: Restriction enzymes cut at the start of their recognition site.
+  concepts: [cut_position, restriction_site]
+  feedback:
+    short: Each enzyme cuts at its own defined position relative to the site.
+    explain: |
+      The cut position is specific to each enzyme and often isn't the first base:
+      EcoRI cuts G^AATTC, HaeIII cuts GG^CC and PstI cuts CTGCA^G. Some enzymes
+      (Type IIS) even cut outside their recognition site.
+  references: ["http://rebase.neb.com"]
+
+- id: M-011
+  statement: The number of fragments doesn't depend on whether the DNA is linear or circular.
+  concepts: [dna_topology, fragment_size]
+  feedback:
+    short: n cuts give n+1 fragments if linear, but n fragments if circular.
+    explain: |
+      A linear molecule already has two ends, so n cuts make n+1 pieces. A
+      circular plasmid has no ends, so n cuts make n pieces. A single cut just
+      linearises the plasmid.
+
+- id: M-013
+  statement: All restriction enzymes leave sticky ends.
+  concepts: [blunt_end, sticky_end]
+  feedback:
+    short: Some enzymes leave blunt ends.
+    explain: |
+      Enzymes that cut both strands at the same position leave blunt ends with no
+      overhang, e.g. HaeIII (GG^CC). Only staggered cuts leave single-stranded
+      overhangs (sticky ends).
+
+- id: M-014
+  statement: Restriction enzymes always cut both strands at the same position.
+  concepts: [sticky_end, blunt_end, cut_position]
+  feedback:
+    short: Many enzymes make staggered cuts that leave overhangs.
+    explain: |
+      EcoRI cuts between G and A on both strands of GAATTC. Because the strands are
+      antiparallel, those cuts are four bases apart, leaving 5'-AATT single-stranded
+      overhangs (sticky ends).
+
+- id: M-015
+  statement: Sticky ends are always 5' overhangs.
+  concepts: [overhang_polarity]
+  feedback:
+    short: Some enzymes leave 3' overhangs.
+    explain: |
+      PstI cuts CTGCA^G, so the protruding single strand (TGCA) ends in a 3'
+      end. Polarity matters: a 3' overhang can't pair with a 5' overhang, even if
+      the bases look complementary.
+
+- id: M-016
+  statement: 5' and 3' overhangs are interchangeable.
+  concepts: [overhang_polarity, compatible_ends]
+  feedback:
+    short: Which strand protrudes is set by where each strand is cut.
+    explain: |
+      If the top-strand cut lies upstream of the bottom-strand cut (EcoRI, G^AATTC),
+      the single strand left sticking out has a free 5' end, so it's a 5'
+      overhang. If it lies downstream (PstI, CTGCA^G), you get a 3' overhang. Ends
+      with different polarity can't anneal.
+
+- id: M-017
+  statement: Only ends cut by the same enzyme can be ligated.
+  concepts: [compatible_ends, ligation]
+  feedback:
+    short: Complementary overhangs ligate, whichever enzyme made them.
+    explain: |
+      BamHI (G^GATCC) and BglII (A^GATCT) both leave 5'-GATC overhangs, so their
+      ends anneal and ligate. SalI and XhoI share TCGA overhangs in the same way.
+      The hybrid site often can't be recut by either enzyme.
+
+- id: M-018
+  statement: Blunt ends cannot be ligated.
+  concepts: [ligation, blunt_end]
+  feedback:
+    short: T4 DNA ligase joins blunt ends too, just less efficiently.
+    explain: |
+      With no overhangs to hold the ends together, blunt-end ligation is slower and
+      usually needs more ligase or DNA. But any blunt end can be joined to any other
+      blunt end.
+
+- id: M-020
+  statement: Any two sticky ends can be ligated.
+  concepts: [compatible_ends]
+  feedback:
+    short: Overhangs must be complementary and of the same polarity.
+    explain: |
+      EcoRI leaves AATT overhangs and BamHI leaves GATC overhangs. They don't
+      base-pair, so these ends won't ligate directly.
+
+- id: M-021
+  statement: Sticky ends can be ligated directly to blunt ends.
+  concepts: [ligation, compatible_ends, blunt_end]
+  feedback:
+    short: A sticky end must be blunted before it can join a blunt end.
+    explain: |
+      The single-stranded overhang has no partner on a blunt end. To join them,
+      first blunt the sticky end: fill in a 5' overhang with a polymerase such as
+      Klenow, or remove a 3' overhang with T4 DNA polymerase.

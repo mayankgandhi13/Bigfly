@@ -1,0 +1,63 @@
+{
+  "bridge": {
+    "code": "# Biopython 1.85\nfrom Bio.Seq import Seq\n\ndna = Seq(\"GCGCAGCGCGCA\")\nprint(dna.reverse_complement())   # the other strand, read 5'->3'\nprint(dna.complement())           # complement only: still reads 3'->5'\n",
+    "doc_url": "https://biopython.org/docs/latest/api/Bio.Seq.html",
+    "language": "python",
+    "tool_versions": [
+      {
+        "tool": "Biopython",
+        "version": "1.85"
+      }
+    ]
+  },
+  "evaluation": {
+    "concepts": [
+      {
+        "concept": "base_pairing",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "antiparallel_strands",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "reverse_complement",
+        "credit_permille": 1000
+      }
+    ],
+    "hints_used": 0,
+    "max_score": 100,
+    "misconceptions": [],
+    "score": 100,
+    "solved": true
+  },
+  "scenario": {
+    "body": {
+      "task": {
+        "dna": "GCGCAGCGCGCA",
+        "round": "reverse_complement"
+      }
+    },
+    "concepts": [
+      "base_pairing",
+      "antiparallel_strands",
+      "reverse_complement"
+    ],
+    "engine_version": "0.1.0",
+    "game": "sequence_scramble",
+    "params": {
+      "difficulty": "intro",
+      "round": "reverse_complement",
+      "seed": 7,
+      "support": "independent"
+    }
+  },
+  "solution": [
+    {
+      "action": {
+        "sequence": "TGCGCGCTGCGC",
+        "type": "submit_sequence"
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# BROKEN ON PURPOSE: there's no BamHI site (GGATCC) in this sequence.
+id: broken.enzyme_does_not_cut
+game: dna_chopper
+difficulty: intro
+body:
+  sequence: AAAGAATTCAAAAAAAAAAA
+  topology: linear
+  task: { round: predict_fragments, enzymes: [BamHI] }

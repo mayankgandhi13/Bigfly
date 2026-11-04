@@ -1,0 +1,58 @@
+# Misconception library v0: analysis and statistics (used by Phase 1–3 games).
+
+- id: M-012
+  statement: High expression means upregulated.
+  concepts: [fold_change, differential_expression]
+  feedback:
+    short: Abundance and change are different things.
+    explain: |
+      How much a gene is expressed is not the same as how much it changes between
+      conditions (log2 fold change), and neither is significance (padj). A highly
+      expressed housekeeping gene can be unchanged. Heatmap colours are usually row
+      z-scores, which show neither fold change nor significance.
+
+- id: M-019
+  statement: Any FastQC FAIL means the sample is bad.
+  concepts: [assay_specific_qc, fastqc_modules]
+  feedback:
+    short: Some FastQC FAILs are expected for certain assays.
+    explain: |
+      FastQC's thresholds assume a random genomic library. For RNA-seq, "Per base
+      sequence content" often fails in the first ~10–12 bases because of random
+      hexamer priming bias. "Sequence duplication levels" often fails because highly
+      expressed transcripts are sampled many times. Judge each module against what's
+      expected for the assay.
+  references: ["https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/"]
+
+- id: M-027
+  statement: Low % identity always means the sequences are unrelated.
+  concepts: [homology, e_value]
+  feedback:
+    short: Judge homology by the E-value, not a fixed identity cut-off.
+    explain: |
+      For proteins, 25–40% identity with a tiny E-value over a long alignment is
+      often clear evidence of homology. The "twilight zone" (~20–35% identity) is
+      where identity alone becomes unreliable. The E-value depends on database size,
+      and nucleotide and protein identities aren't directly comparable.
+
+- id: M-041
+  statement: A lower p-value threshold is more reliable in every case.
+  concepts: [p_value, multiple_testing, fdr]
+  feedback:
+    short: Stricter thresholds trade false positives for false negatives.
+    explain: |
+      A lower threshold cuts false positives but also costs power, so you miss real
+      effects. The right choice depends on the number of tests, the cost of each
+      kind of error, and the study design. Fix thresholds before seeing the data,
+      and use FDR control (e.g. Benjamini–Hochberg) for genome-wide testing.
+
+- id: M-063
+  statement: Correlation across omics layers implies causation.
+  concepts: [correlation_vs_causation, multi_omics_integration]
+  feedback:
+    short: Co-varying layers don't show that one causes the other.
+    explain: |
+      A variant, a transcript and a protein changing together can reflect
+      confounders (cell-type composition, batch) or reverse causation.
+      mRNA–protein correlation is also only moderate, so discordance is normal.
+      Causal claims need perturbation or genetic evidence.

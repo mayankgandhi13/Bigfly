@@ -1,0 +1,68 @@
+{
+  "bridge": {
+    "code": "# Biopython 1.85\nfrom Bio.Seq import Seq\n\nmrna = Seq(\"CGCAGCGCGCAGCUAUGCGUCAAGUCCAGGCCCGUAAAAACUACAGAGGAGCGUGCUGUGCAUAGAAGGCGCGG\")\nstart = mrna.find(\"AUG\")\norf = mrna[start:]\norf = orf[: len(orf) - len(orf) % 3]   # whole codons only\nprint(orf.translate(to_stop=True))\n",
+    "doc_url": "https://biopython.org/docs/latest/api/Bio.Seq.html",
+    "language": "python",
+    "tool_versions": [
+      {
+        "tool": "Biopython",
+        "version": "1.85"
+      }
+    ]
+  },
+  "evaluation": {
+    "concepts": [
+      {
+        "concept": "translation",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "start_codon",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "stop_codon",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "genetic_code",
+        "credit_permille": 1000
+      }
+    ],
+    "hints_used": 0,
+    "max_score": 100,
+    "misconceptions": [],
+    "score": 100,
+    "solved": true
+  },
+  "scenario": {
+    "body": {
+      "task": {
+        "mrna": "CGCAGCGCGCAGCUAUGCGUCAAGUCCAGGCCCGUAAAAACUACAGAGGAGCGUGCUGUGCAUAGAAGGCGCGG",
+        "round": "translate"
+      }
+    },
+    "concepts": [
+      "translation",
+      "start_codon",
+      "stop_codon",
+      "genetic_code"
+    ],
+    "engine_version": "0.1.0",
+    "game": "sequence_scramble",
+    "params": {
+      "difficulty": "advanced",
+      "round": "translate",
+      "seed": 7,
+      "support": "independent"
+    }
+  },
+  "solution": [
+    {
+      "action": {
+        "sequence": "MRQVQARKNYRGACCA",
+        "type": "submit_sequence"
+      }
+    }
+  ]
+}

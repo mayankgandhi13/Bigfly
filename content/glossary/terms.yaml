@@ -1,0 +1,64 @@
+# Glossary v0. Target: 50+ terms by Phase 1.
+
+- id: restriction_enzyme
+  term: Restriction enzyme
+  definition: A bacterial endonuclease that cuts DNA at or near a specific recognition sequence.
+  concepts: [restriction_enzyme, restriction_site]
+  see_also: [palindrome, overhang]
+
+- id: palindrome
+  term: Palindromic sequence
+  definition: A double-stranded sequence that reads the same 5'→3' on both strands, i.e. it equals its own reverse complement (e.g. GAATTC).
+  concepts: [palindromic_site]
+
+- id: overhang
+  term: Overhang
+  definition: A single-stranded end left by a staggered cut. Its free end is either 5' or 3'.
+  concepts: [sticky_end, overhang_polarity]
+  see_also: [dna_ligase]
+
+- id: dna_ligase
+  term: DNA ligase
+  definition: An enzyme that joins DNA ends by forming phosphodiester bonds. T4 DNA ligase can join both sticky and blunt ends.
+  concepts: [ligation]
+
+- id: plasmid
+  term: Plasmid
+  definition: A small circular DNA molecule that replicates independently of the chromosome. Widely used as a cloning vector.
+  concepts: [dna_topology]
+
+- id: agarose_gel
+  term: Agarose gel
+  definition: A porous gel used to separate DNA fragments by size in an electric field. Smaller fragments migrate further.
+  concepts: [gel_electrophoresis]
+
+- id: codon
+  term: Codon
+  definition: Three nucleotides in mRNA that specify one amino acid or a stop signal.
+  concepts: [codon, genetic_code]
+
+- id: utr
+  term: Untranslated region (UTR)
+  definition: The parts of an mRNA before the start codon (5' UTR) and after the stop codon (3' UTR).
+  concepts: [start_codon, stop_codon]
+
+- id: open_reading_frame
+  term: Open reading frame (ORF)
+  definition: A sequence from a start codon to the next in-frame stop codon.
+  concepts: [open_reading_frame]
+  see_also: [codon]
+
+- id: e_value
+  term: E-value
+  definition: In BLAST, the number of alignments with at least this score expected by chance in a database of this size. Lower means more significant.
+  concepts: [e_value, homology]
+
+- id: phred_score
+  term: Phred quality score
+  definition: Q = -10·log10(P), where P is the probability that a base call is wrong.
+  concepts: [phred_quality]
+
+- id: fdr
+  term: False discovery rate (FDR)
+  definition: The expected fraction of false positives among results called significant. DESeq2's padj is a Benjamini–Hochberg FDR-adjusted p-value.
+  concepts: [fdr]

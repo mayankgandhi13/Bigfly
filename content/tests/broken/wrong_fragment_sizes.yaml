@@ -1,0 +1,11 @@
+# BROKEN ON PURPOSE: the author's claimed sizes don't match the real digest (21 + 19).
+id: broken.wrong_fragment_sizes
+game: dna_chopper
+difficulty: standard
+body:
+  sequence: AAAGAATTCAAAAAAAAAAAAAAAGAATTCAAAAAAAAAA
+  topology: circular
+  task: { round: predict_fragments, enzymes: [EcoRI] }
+expect:
+  solution:
+    - { type: submit_fragments, sizes: [20, 20] }

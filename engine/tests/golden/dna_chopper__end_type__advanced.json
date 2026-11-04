@@ -1,0 +1,65 @@
+{
+  "bridge": {
+    "code": "# Biopython 1.85\nfrom Bio.Restriction import HaeIII\n\nprint(HaeIII.elucidate())   # ^ = top-strand cut, _ = bottom-strand cut\nprint(\"5' overhang:\", HaeIII.is_5overhang())\nprint(\"3' overhang:\", HaeIII.is_3overhang())\nprint(\"blunt:\", HaeIII.is_blunt())\nprint(\"overhang sequence:\", HaeIII.ovhgseq)\n",
+    "doc_url": "https://biopython.org/docs/latest/api/Bio.Restriction.html",
+    "language": "python",
+    "tool_versions": [
+      {
+        "tool": "Biopython",
+        "version": "1.85"
+      }
+    ]
+  },
+  "evaluation": {
+    "concepts": [
+      {
+        "concept": "sticky_end",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "blunt_end",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "overhang_polarity",
+        "credit_permille": 1000
+      }
+    ],
+    "hints_used": 0,
+    "max_score": 100,
+    "misconceptions": [],
+    "score": 100,
+    "solved": true
+  },
+  "scenario": {
+    "body": {
+      "sequence": "TTGGTGACACCTTAAAAGGCCGGTTTCGCGCATTCG",
+      "task": {
+        "enzyme": "HaeIII",
+        "round": "end_type"
+      },
+      "topology": "linear"
+    },
+    "concepts": [
+      "sticky_end",
+      "blunt_end",
+      "overhang_polarity"
+    ],
+    "engine_version": "0.1.0",
+    "game": "dna_chopper",
+    "params": {
+      "difficulty": "advanced",
+      "round": "end_type",
+      "seed": 7,
+      "support": "independent"
+    }
+  },
+  "solution": [
+    {
+      "action": {
+        "end": "blunt",
+        "type": "choose_end_type"
+      }
+    }
+  ]
+}

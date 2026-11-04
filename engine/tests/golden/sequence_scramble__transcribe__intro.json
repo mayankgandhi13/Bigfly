@@ -1,0 +1,64 @@
+{
+  "bridge": {
+    "code": "# Biopython 1.85\nfrom Bio.Seq import Seq\n\ntemplate = Seq(\"CTCCTCTCGGA\")   # template (antisense) strand, 5'->3'\ncoding = template.reverse_complement()\nprint(coding.transcribe())   # Biopython's transcribe() expects the coding strand\n",
+    "doc_url": "https://biopython.org/docs/latest/api/Bio.Seq.html",
+    "language": "python",
+    "tool_versions": [
+      {
+        "tool": "Biopython",
+        "version": "1.85"
+      }
+    ]
+  },
+  "evaluation": {
+    "concepts": [
+      {
+        "concept": "transcription",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "template_vs_coding_strand",
+        "credit_permille": 1000
+      },
+      {
+        "concept": "rna_vs_dna",
+        "credit_permille": 1000
+      }
+    ],
+    "hints_used": 0,
+    "max_score": 100,
+    "misconceptions": [],
+    "score": 100,
+    "solved": true
+  },
+  "scenario": {
+    "body": {
+      "task": {
+        "dna": "CTCCTCTCGGA",
+        "round": "transcribe",
+        "strand": "template"
+      }
+    },
+    "concepts": [
+      "transcription",
+      "template_vs_coding_strand",
+      "rna_vs_dna"
+    ],
+    "engine_version": "0.1.0",
+    "game": "sequence_scramble",
+    "params": {
+      "difficulty": "intro",
+      "round": "transcribe",
+      "seed": 7,
+      "support": "independent"
+    }
+  },
+  "solution": [
+    {
+      "action": {
+        "sequence": "UCCGAGAGGAG",
+        "type": "submit_sequence"
+      }
+    }
+  ]
+}

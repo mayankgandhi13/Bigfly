@@ -1,0 +1,52 @@
+# Concept graph v0: sequences, formats and similarity (Levels 1–2).
+
+- id: fasta_format
+  name: FASTA format
+  area: sequence_analysis
+  level: 1
+  requires: [nucleotide_bases]
+  summary: A '>' header line followed by sequence lines.
+
+- id: phred_quality
+  name: Phred quality scores
+  area: sequence_analysis
+  level: 1
+  summary: Q = -10·log10(P_error). Q20 means a 1% error chance and Q30 means 0.1%.
+  glossary: [phred_score]
+
+- id: fastq_format
+  name: FASTQ format
+  area: sequence_analysis
+  level: 1
+  requires: [fasta_format, phred_quality]
+  summary: Four lines per read (header, sequence, '+', and per-base qualities encoded as ASCII, usually Phred+33).
+
+- id: sequence_similarity
+  name: Sequence similarity
+  area: sequence_analysis
+  level: 1
+  requires: [fasta_format]
+  summary: How alike two sequences are (identity, similarity), measured over an alignment.
+
+- id: sequence_alignment
+  name: Sequence alignment
+  area: sequence_analysis
+  level: 1
+  requires: [sequence_similarity]
+  summary: Arranging sequences to line up matching positions, with gaps for insertions and deletions.
+
+- id: e_value
+  name: E-value
+  area: sequence_analysis
+  level: 1
+  requires: [sequence_alignment]
+  summary: The expected number of hits this good or better by chance in a database of this size. It depends on database size.
+  glossary: [e_value]
+
+- id: homology
+  name: Homology
+  area: sequence_analysis
+  level: 1
+  requires: [sequence_similarity, e_value]
+  summary: Shared evolutionary ancestry. It's inferred from significant similarity (judge by E-value, not a fixed identity cut-off).
+  misconceptions: [M-027]

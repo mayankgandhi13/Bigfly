@@ -1,0 +1,78 @@
+# Concept graph v0: QC and statistics spine (Level 2). Fleshed out in Phase 2.
+
+- id: fastqc_modules
+  name: FastQC modules
+  area: qc
+  level: 2
+  requires: [fastq_format, phred_quality]
+  summary: FastQC's per-module PASS/WARN/FAIL flags are heuristics tuned for random genomic libraries.
+
+- id: assay_specific_qc
+  name: Assay-specific QC expectations
+  area: qc
+  level: 2
+  requires: [fastqc_modules]
+  summary: What counts as a problem depends on the assay. For RNA-seq, per-base content and duplication FAILs are often expected.
+  misconceptions: [M-019]
+
+- id: counts_matrix
+  name: Count matrix
+  area: statistics
+  level: 2
+  requires: [fastq_format]
+  summary: A genes × samples table of read (or UMI) counts.
+
+- id: fold_change
+  name: Log2 fold change
+  area: statistics
+  level: 2
+  requires: [counts_matrix]
+  summary: log2 of the ratio of (normalised) expression between conditions. It's a change, not an abundance.
+  misconceptions: [M-012]
+
+- id: p_value
+  name: p-value
+  area: statistics
+  level: 2
+  summary: The probability of data at least this extreme if the null hypothesis were true.
+
+- id: multiple_testing
+  name: Multiple testing
+  area: statistics
+  level: 2
+  requires: [p_value]
+  summary: Testing thousands of genes produces many small p-values by chance alone.
+  misconceptions: [M-041]
+
+- id: fdr
+  name: False discovery rate
+  area: statistics
+  level: 2
+  requires: [p_value, multiple_testing]
+  summary: The expected proportion of false positives among the discoveries. Controlled by Benjamini–Hochberg (padj).
+  misconceptions: [M-041]
+  glossary: [fdr]
+
+- id: differential_expression
+  name: Differential expression
+  area: statistics
+  level: 2
+  requires: [fold_change, fdr]
+  summary: Testing which genes change between conditions, reporting effect size (log2FC) and significance (padj).
+  misconceptions: [M-012]
+
+- id: correlation_vs_causation
+  name: Correlation vs causation
+  area: statistics
+  level: 2
+  requires: [p_value]
+  summary: Variables can be correlated through confounders or reverse causation without one causing the other.
+  misconceptions: [M-063]
+
+- id: multi_omics_integration
+  name: Multi-omics integration
+  area: statistics
+  level: 3
+  requires: [differential_expression, correlation_vs_causation]
+  summary: Linking genome, transcriptome and proteome data. mRNA–protein correlation is only moderate.
+  misconceptions: [M-063]
