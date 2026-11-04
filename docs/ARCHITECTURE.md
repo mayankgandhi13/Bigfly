@@ -232,6 +232,8 @@ mastery     (user_id, concept_id, estimate, n_items, updated_at)  -- derived fro
 classes     (id, instructor_id, code, name)
 enrolments  (class_id, user_id)
 reports     (id, user_id, game, seed, content_version, text, status)
+entitlements(id, subject_type, subject_id, feature, source, starts_at, expires_at)  -- §7.9.2
+audit_log   (id, actor_id, action, target_type, target_id, ts)  -- instructor reads, admin actions
 ```
 `engine_version` was added to `attempts` (it wasn't in the original sketch) so replays can pick the matching engine build.
 
@@ -266,12 +268,60 @@ reports     (id, user_id, game, seed, content_version, text, status)
 - **GDPR:** data export and account deletion from day one.
 - **FERPA** applies if US universities use instructor mode. Instructors see only their own class, enforced by RLS.
 
-### 7.9 Accessibility
+### 7.9 Security
+
+The guiding rule: **anything on the CDN is public.** Static files can't be protected by a login or paywall. Data or content that must be protected is served only through an authenticated path (database with RLS, a server function, or R2 signed URLs).
+
+#### 7.9.1 Login wall (authentication)
+- **Phase 0-1: no login.** All play is anonymous, and progress lives in localStorage.
+- **Phase 2+: an optional account.** It's needed to sync progress and mastery, earn verified scores, join a class, or appear on leaderboards. Guest play stays available, and a guest's local progress can be imported when they sign up.
+- Supabase Auth with an email magic link plus OAuth (GitHub, Google). Institution SSO comes later if instructor mode needs it. **We store no passwords ourselves.**
+- Sessions use Supabase's short-lived JWTs with refresh tokens. Sign-out revokes the refresh token.
+- Roles: `learner`, `instructor`, `admin`. The role lives in the database, not in client-editable metadata, and is checked by RLS.
+- Minimum age is set in the terms, likely 16+ (the highest GDPR digital-consent age). **[DECIDE with the owner before Phase 2.]**
+
+#### 7.9.2 Paywall (entitlements). Business model still open
+- There is no payment provider until a business model is chosen. The architecture only reserves the hooks:
+  - an `entitlements` table: `(id, subject_type user|class|institution, subject_id, feature, source, starts_at, expires_at)`
+  - features matching the existing feature flags: `instructor_mode`, `case_files`, `notebook_mode`, …
+- **Entitlements are enforced on the server (RLS/server functions). Client-side flags only hide UI.**
+- Content that might be paid (e.g. full Case Files) is therefore kept out of the public static bundle and served through an authenticated endpoint or R2 signed URLs. Free content stays static.
+- If payments are added later, use a hosted checkout (e.g. Stripe Checkout) plus a webhook that writes `entitlements`. **We never handle card data.**
+
+#### 7.9.3 Firewall (network and abuse protection)
+- Put the domain behind Cloudflare (DNS proxy) whatever the host. That gives DDoS protection, TLS, basic bot protection and managed firewall/rate-limit rules. **Verify current free-tier limits before relying on them.**
+- Rate limiting on every write path: attempt submissions, score verification, error reports, sign-up and magic-link requests. This is enforced in server functions and the DB (per-user and per-IP), not just at the edge.
+- Score verification has bounded work. Action logs have a size cap and replays have a step and time limit, so a malicious log can't tie up the server.
+- CAPTCHA (e.g. Cloudflare Turnstile) only on sign-up and anonymous error reports, and only if abuse appears.
+
+#### 7.9.4 Data protection
+- **Access control:** RLS is **enabled on every table**, with deny-by-default policies. Learners read and write only their own rows. Instructors read only the enrolments and mastery of their own classes. Leaderboards are exposed through views that show only display name, rank and score.
+- **Append-only attempts:** clients can only INSERT through a server function. There is no client UPDATE/DELETE. Mastery is written only by the server.
+- **Keys:** the Supabase anon key is public by design (RLS is the real control). The `service_role` key, R2 credentials and any GitHub token are **server-only**, kept in environment variables or the host's secret store, and never prefixed `NEXT_PUBLIC_`.
+- **Encryption:** TLS everywhere (HSTS). Supabase/Postgres and R2 encrypt at rest. **Backups are additionally encrypted** (e.g. with `age`) before upload to R2, and the decryption key is kept offline. A restore is tested each quarter.
+- **Minimal PII:** a display name, the email (held by Auth) and the role. No real names are required. Free-text fields (reports, the "explain your reasoning" box) are length-capped, and the UI warns people not to enter personal data.
+- **Untrusted input:** action logs and scenarios are parsed by the engine with strict schemas. User text is rendered as text, never as HTML.
+- **Browser hardening:** a Content Security Policy (`script-src 'self' 'wasm-unsafe-eval'` plus explicit Sentry/Supabase origins), `frame-ancestors 'none'`, `Referrer-Policy: strict-origin-when-cross-origin`, and no third-party scripts beyond Sentry (with PII scrubbing on).
+- **Error reports:** Phase 1 uses a prefilled GitHub-issue URL (game, seed, content_version), so there's no token or server. Later, a rate-limited server function holds the token.
+
+#### 7.9.5 Compliance and privacy operations
+- **GDPR:** data export (a JSON of the user's rows) and account deletion (a cascade, plus removal from the next backup rotation) from day one. Publish the privacy policy and a data-retention policy. Research and learning-gain data uses pseudonymous IDs, and consent is asked for before any data is used in a publication.
+- **FERPA** (if US universities use instructor mode): instructors see only their own class, through RLS. Every instructor read of learner data is logged in an `audit_log` table.
+- No ads and no third-party tracking. Analytics, if added, must be privacy-preserving and cookieless.
+
+#### 7.9.6 Secure development
+- Dependabot/Renovate, plus GitHub secret scanning and push protection.
+- `cargo audit` and `pnpm audit` in CI.
+- RLS policy tests in CI from Phase 2 (e.g. pgTAP or SQL tests that assert user A can't read user B's rows).
+- A `SECURITY.md` asks people to report vulnerabilities through GitHub private vulnerability reporting.
+- The terminal game **never executes real shell commands**. It's simulated in the engine.
+
+### 7.10 Accessibility
 - Colour-blind-safe palettes (viridis-style) for gels, heatmaps and volcano plots, **plus a second visual channel** (shape, pattern or label).
 - A keyboard/click alternative for every drag-and-drop.
 - L1 games are mobile-friendly. Terminal and Pipeline Builder are desktop-first.
 
-### 7.10 Keeping the business model open
+### 7.11 Keeping the business model open
 - Static-first (near-zero cost) and portable hosting.
 - Feature flags around instructor mode, Case Files and Notebook mode.
 - The engine is a separate crate, so it can be open-sourced on its own as `seqly-engine`.

@@ -59,6 +59,15 @@ When unsure about a scientific claim, **say so and ask** rather than inventing. 
 - Content releases are versioned (`content/VERSION`). Every attempt stores `content_version`.
 - New Case Files should be mostly content, not code.
 
+## Security rules (full detail in docs/ARCHITECTURE.md §7.9)
+- **Anything on the CDN is public.** Never put gated or paid content or user data in the static bundle.
+- **RLS on every table, deny by default.** Client flags only hide UI. Entitlements and roles are enforced on the server.
+- Secrets (`service_role`, R2, GitHub tokens) are **server-only**. Never use `NEXT_PUBLIC_` for them, and never commit them.
+- Attempts are append-only (insert via a server function only). Mastery is written only by the server.
+- Rate-limit every write path. Cap action-log size and replay work.
+- Encrypt backups before upload. Minimal PII. Render user text as text, never as HTML.
+- No payment card handling, ever. If payments are added: hosted checkout + webhook → `entitlements`.
+
 ## Conventions
 - **Spelling: British English** in prose, UI text, content, comments and our own identifiers (`colour`, `normalisation`, `tumour`, `randomise`). Keep external spellings unchanged (CSS `color`, library APIs, tool flags such as `--normalize`).
 - Prefer simple solutions over clever ones. Keep code well tested. Write tests alongside every engine feature.
