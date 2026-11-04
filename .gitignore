@@ -1,0 +1,20 @@
+# Rust
+engine/target/
+**/*.rs.bk
+
+# Node / Next.js
+node_modules/
+apps/web/.next/
+apps/web/out/
+*.tsbuildinfo
+
+# Snakemake / data
+data-pipeline/.snakemake/
+data-pipeline/raw/
+data-pipeline/work/
+
+# Env / OS
+.env
+.env.*
+!.env.example
+.DS_Store

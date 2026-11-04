@@ -1,0 +1,11 @@
+[package]
+name = "seqly-engine"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.95"
+description = "Deterministic bioinformatics simulation engines for Seqly.bio"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
